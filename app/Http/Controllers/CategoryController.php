@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categorys = Category::withCount('blogs')->latest()->paginate(5);
-        return view('blogs\category\index', compact('categorys'))->with('i', (request()->input('page', 1) - 1) * 5);; 
+        return view('blogs.category.index', compact('categorys'))->with('i', (request()->input('page', 1) - 1) * 5);; 
     }
 
     /**
@@ -25,7 +25,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('blogs\category\create');
+        $categories = Category::get()->toTree();
+        return view('blogs.category.create', compact('categories'));
     }
 
     /**
@@ -39,8 +40,15 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required',
         ]);
+        
+        if($request->parent)
+        {
+            $parent = Category::find($request->parent);
+            Category::create($request->except('parent'), $parent);
+        }else{
+            Category::create($request->except('parent'));
+        }
 
-        Category::create($request->all());
         return redirect()->route('categorys.index')->with('success', 'Category created successfully');
     }
 
@@ -52,7 +60,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return view('blogs\category\show', compact('category'));
+        return view('blogs.category.show', compact('category'));
     }
 
     /**
@@ -63,7 +71,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('blogs\category\edit', compact('category'));
+        return view('blogs.category.edit', compact('category'));
     }
 
     /**

@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->nestedSet(); // for nestedset
             $table->timestamps();
         });
     }
@@ -28,5 +29,8 @@ class CreateCategoriesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('categories');
+        Schema::table('table', function (Blueprint $table) {
+            $table->dropNestedSet();
+        });
     }
 }

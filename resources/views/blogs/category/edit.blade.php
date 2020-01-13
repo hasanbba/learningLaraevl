@@ -1,4 +1,4 @@
-@extends('blogs\category\master')
+@extends('blogs.category.master')
 
 @section('page-content')
 <div class="container">

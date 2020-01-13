@@ -33,7 +33,7 @@ class BookController extends Controller
                 ->make(true);
         }
 
-        return view('books\book');
+        return view('books.book');
     }
 
     /**
